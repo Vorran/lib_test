@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vite App</title>
+  </head>
+  <body>
+    <h1>Bibliothèque</h1>
+    <form id="formulaire">
+      <label for="isbn">Code ISBN du livre :</label><br>
+      <input type="text" id="isbn" name="isbn"><br>
+      <input type="submit" value="Rechercher">
+    </form>
+    <br>
+    <div id="resultats"></div>
+    <script>
+      const formulaire = document.getElementById("formulaire");
+      const resultats = document.getElementById("resultats");
+
+      formulaire.addEventListener("submit", (e) => {
+        e.preventDefault(); // Empêche la soumission du formulaire
+        const isbn = e.target.elements.isbn.value; // Récupère la valeur de l'ISBN
+
+        // Fait une requête à l'API de https://www.chasse-aux-livres.fr/ en utilisant l'ISBN
+        fetch(`https://www.chasse-aux-livres.fr/api/v1/books?isbn=${isbn}`)
+          .then((response) => response.json())
+          .then((data) => {
+            // Affiche les résultats de la recherche
+            resultats.innerHTML = `
+              <table>
+                <tr>
+                  <th>Titre</th>
+                  <th>Auteur</th>
+                  <th>Couverture</th>
+                  ...
+                </tr>
+              </table>
+            `;
+
+            // Parcours les résultats de la recherche
+            data.forEach((livre) => {
+              // Crée une ligne pour chaque livre dans la table
+              resultats.innerHTML += `
+                <tr>
+                  <td>${livre.title}</td>
+                  <td>${livre.author}</td>
+                  <td><a href="${livre.cover_url}" target="_blank">Voir la couverture</a></td>
+                  <td><a href="${livre.description_url}" target="_blank">Voir le quatrième de couverture</a></td>
+                </tr>
+              `;
+            });
+          });
+      });
+    </script>
+  </body>
+</html>
+test
+test 2
+teste 2
